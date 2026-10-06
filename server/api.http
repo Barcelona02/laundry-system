@@ -33,3 +33,30 @@ Content-Type: application/json
 
 ### 5. Search
 GET {{baseUrl}}/customers?search=rosa
+
+### 6. Get customers (para makuha ang ID)
+# @name customers
+GET {{baseUrl}}/customers
+
+### 7. Get active services (para makuha ang ID)
+# @name services
+GET {{baseUrl}}/services?active=true
+
+### 8. Create order -> 201
+# @name newOrder
+POST {{baseUrl}}/orders
+Content-Type: application/json
+
+{
+  "customer": "{{customers.response.body.$[0]._id}}",
+    "service": "{{services.response.body.$[5]._id}}",
+  "quantity": 6,
+  "addOns": ["fabcon"],
+  "isRush": true
+}
+
+### 9. Get order detail (with balance)
+GET {{baseUrl}}/orders/{{newOrder.response.body._id}}
+
+### 10. List all orders
+GET {{baseUrl}}/orders
