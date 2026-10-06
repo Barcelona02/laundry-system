@@ -1,0 +1,35 @@
+@baseUrl = http://localhost:5000/api
+
+### 1. Get all customers
+GET {{baseUrl}}/customers
+
+### 2. Create customer (valid) -> 201
+POST {{baseUrl}}/customers
+Content-Type: application/json
+
+{
+  "name": "Rosa Santos",
+  "phone": "09171234567",
+  "address": "Angeles City"
+}
+
+### 3. Create customer (invalid) -> 400
+POST {{baseUrl}}/customers
+Content-Type: application/json
+
+{
+  "name": "R",
+  "phone": "12345"
+}
+
+### 4. Duplicate phone -> 400
+POST {{baseUrl}}/customers
+Content-Type: application/json
+
+{
+  "name": "Rosa Duplicate",
+  "phone": "09171234567"
+}
+
+### 5. Search
+GET {{baseUrl}}/customers?search=rosa

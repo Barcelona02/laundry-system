@@ -3,6 +3,7 @@ const cors = require("cors");
 const logger = require("./middleware/logger");
 const notFound = require("./middleware/notFound");
 const errorHandler = require("./middleware/errorHandler");
+const customerRoutes = require("./routes/customers");
 
 const app = express();
 
@@ -13,7 +14,7 @@ app.use(logger);
 
 // 2. Routes
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
-// (dito natin ima-mount ang customers, orders, etc. mamaya)
+app.use("/api/customers", customerRoutes);
 
 // 3. 404 catch-all (pagkatapos ng lahat ng routes)
 app.use(notFound);
