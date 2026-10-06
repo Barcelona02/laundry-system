@@ -138,6 +138,25 @@ async function run() {
   const after = await call("GET", "/machines/availability");
   check("washer released (inUse back)", after.data.washer.inUse, inUseBefore);
 
+    // ===== D. STATS + TRACKING =====
+  console.log("\nD. Stats + Tracking");
+  const dash = await call("GET", "/stats/dashboard");
+  check("dashboard", dash.status, 200, dash.data);
+  check("dashboard has today's sales", typeof dash.data.sales.today, "number");
+
+  const sales = await call("GET", "/stats/sales?days=7");
+  check("sales report", sales.status, 200, sales.data);
+  check("sales series has 7 days", sales.data.series.length, 7);
+  check("invalid days rejected", (await call("GET", "/stats/sales?days=abc")).status, 400);
+
+  const code = order.data.orderCode;
+  const track = await call("GET", `/track/${code}`);
+  check(`track ${code}`, track.status, 200, track.data);
+  check("tracked order fully paid", track.data.balance, 0);
+  check("track lowercase code", (await call("GET", `/track/${code.toLowerCase()}`)).status, 200);
+  check("track invalid format", (await call("GET", "/track/HELLO")).status, 400);
+  check("track not found", (await call("GET", "/track/LND-99999")).status, 404);
+  
   // ===== SUMMARY =====
   console.log(`\nResult: ${passed} passed, ${failed} failed\n`);
   process.exitCode = failed ? 1 : 0;

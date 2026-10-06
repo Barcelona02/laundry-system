@@ -8,6 +8,8 @@ const serviceRoutes = require("./routes/services");
 const orderRoutes = require("./routes/orders");
 const paymentRoutes = require("./routes/payments");
 const machineRoutes = require("./routes/machines");
+const statsRoutes = require("./routes/stats");
+const trackRoutes = require("./routes/track");
 
 const app = express();
 
@@ -23,6 +25,8 @@ app.use("/api/services", serviceRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/machines", machineRoutes);
+app.use("/api/stats", statsRoutes);
+app.use("/api/track", trackRoutes);
 
 
 // 3. 404 catch-all (pagkatapos ng lahat ng routes)
