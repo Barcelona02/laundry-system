@@ -208,4 +208,47 @@ router.patch("/:id/status", async (req, res) => {
   res.json(order);
 });
 
+// PATCH /api/orders/:id/machine   body: { "machine": "<machineId>" }
+router.patch("/:id/machine", async (req, res) => {
+  const { machine: machineId } = req.body;
+  if (!machineId) throw httpError(400, "Machine is required");
+
+  const order = await Order.findById(req.params.id).populate("service", "pricingType");
+  if (!order) throw httpError(404, "Order not found");
+
+  // Rule 1: washer kapag washing, dryer kapag drying
+  const neededType = { washing: "washer", drying: "dryer" }[order.status];
+  if (!neededType) {
+    throw httpError(400, `Machines can only be assigned while washing or drying (order is ${order.status})`);
+  }
+  if (order.machine) throw httpError(400, "Order already has a machine assigned");
+
+  const machine = await Machine.findById(machineId);
+  if (!machine) throw httpError(404, "Machine not found");
+
+  if (machine.type !== neededType) {
+    throw httpError(400, `Order is ${order.status}, so it needs a ${neededType}, not a ${machine.type}`);
+  }
+  // Rule 2: dapat available
+  if (machine.status !== "available") {
+    throw httpError(400, `Machine ${machine.code} is ${machine.status.replace("_", " ")}`);
+  }
+  // Rule 3: kasya dapat sa capacity
+  if (order.service.pricingType === "per_kg" && order.quantity > machine.capacityKg) {
+    throw httpError(400, `${order.quantity} kg exceeds ${machine.code}'s capacity of ${machine.capacityKg} kg`);
+  }
+
+  // Atomic: kunin lang kung available pa talaga (para hindi magdoble kapag sabay na nag-assign)
+  const taken = await Machine.findOneAndUpdate(
+    { _id: machine._id, status: "available" },
+    { status: "in_use", currentOrder: order._id }
+  );
+  if (!taken) throw httpError(400, `Machine ${machine.code} was just taken. Pick another one.`);
+
+  order.machine = machine._id;
+  await order.save();
+  await order.populate("machine", "code type capacityKg");
+  res.json(order);
+});
+
 module.exports = router;

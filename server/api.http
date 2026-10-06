@@ -1,16 +1,21 @@
 @baseUrl = http://localhost:5000/api
 
+############################################
+# A. CUSTOMERS
+############################################
+
 ### 1. Get all customers
 GET {{baseUrl}}/customers
 
 ### 2. Create customer (valid) -> 201
+# Paalala: 400 na ito kapag na-run mo na dati (existing na ang phone)
 POST {{baseUrl}}/customers
 Content-Type: application/json
 
 {
-  "name": "Rosa Santos",
-  "phone": "09171234567",
-  "address": "Angeles City"
+  "name": "Grace Villanueva",
+  "phone": "09351112233",
+  "address": "Anunas, Angeles City"
 }
 
 ### 3. Create customer (invalid) -> 400
@@ -34,11 +39,18 @@ Content-Type: application/json
 ### 5. Search
 GET {{baseUrl}}/customers?search=rosa
 
+
+############################################
+# B. ORDERS + PAYMENTS (buong buhay ng order)
+# I-run in order: 6 -> 21
+############################################
+
 ### 6. Get customers (para makuha ang ID)
 # @name customers
 GET {{baseUrl}}/customers
 
 ### 7. Get active services (para makuha ang ID)
+# $[5] = Wash-Dry-Fold
 # @name services
 GET {{baseUrl}}/services?active=true
 
@@ -49,7 +61,7 @@ Content-Type: application/json
 
 {
   "customer": "{{customers.response.body.$[0]._id}}",
-    "service": "{{services.response.body.$[5]._id}}",
+  "service": "{{services.response.body.$[5]._id}}",
   "quantity": 6,
   "addOns": ["fabcon"],
   "isRush": true
@@ -126,3 +138,72 @@ PATCH {{baseUrl}}/orders/{{newOrder.response.body._id}}/status
 Content-Type: application/json
 
 { "status": "washing" }
+
+
+############################################
+# C. MACHINES (may sariling order: machineOrder)
+# Kailangan na-run na ang #6 at #7
+# I-run in order: 22 -> 32
+############################################
+
+### 22. Machine availability (bago mag-assign)
+GET {{baseUrl}}/machines/availability
+
+### 23. List all washers ($[3] = W-04 maintenance)
+# @name washers
+GET {{baseUrl}}/machines?type=washer
+
+### 24. List dryers
+# @name dryers
+GET {{baseUrl}}/machines?type=dryer
+
+### 25. Available washers lang
+# @name freeWashers
+GET {{baseUrl}}/machines?type=washer&status=available
+
+### 26. Create order para sa machine tests -> 201
+# @name machineOrder
+POST {{baseUrl}}/orders
+Content-Type: application/json
+
+{
+  "customer": "{{customers.response.body.$[1]._id}}",
+  "service": "{{services.response.body.$[5]._id}}",
+  "quantity": 5
+}
+
+### 27. Status -> washing (HUWAG LAKTAWAN)
+PATCH {{baseUrl}}/orders/{{machineOrder.response.body._id}}/status
+Content-Type: application/json
+
+{ "status": "washing" }
+
+### 28. Assign dryer to washing order -> 400
+PATCH {{baseUrl}}/orders/{{machineOrder.response.body._id}}/machine
+Content-Type: application/json
+
+{ "machine": "{{dryers.response.body.$[0]._id}}" }
+
+### 29. Assign W-04 (maintenance) -> 400
+PATCH {{baseUrl}}/orders/{{machineOrder.response.body._id}}/machine
+Content-Type: application/json
+
+{ "machine": "{{washers.response.body.$[3]._id}}" }
+
+### 30. Assign first available washer -> 200
+PATCH {{baseUrl}}/orders/{{machineOrder.response.body._id}}/machine
+Content-Type: application/json
+
+{ "machine": "{{freeWashers.response.body.$[0]._id}}" }
+
+### 31. Availability (dapat may 1 pang inUse sa washer)
+GET {{baseUrl}}/machines/availability
+
+### 32. Status -> drying (dapat ma-release ang washer)
+PATCH {{baseUrl}}/orders/{{machineOrder.response.body._id}}/status
+Content-Type: application/json
+
+{ "status": "drying" }
+
+### 33. Availability (bawas ulit ng 1 ang inUse)
+GET {{baseUrl}}/machines/availability
