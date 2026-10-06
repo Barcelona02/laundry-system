@@ -43,11 +43,13 @@ function canTransition(from, to) {
 
 // 4. Storage fee kapag matagal nang Ready pero hindi kinukuha
 function computeStorageFee(order, now = new Date()) {
-  if (order.status !== "ready") return { daysUnclaimed: 0, storageFee: 0 };
+  if (!["ready", "claimed"].includes(order.status)) return { daysUnclaimed: 0, storageFee: 0 };
 
   const readyEntry = [...order.statusHistory].reverse().find((h) => h.status === "ready");
   const readyAt = readyEntry ? readyEntry.changedAt : order.updatedAt;
-  const daysUnclaimed = Math.floor((now - new Date(readyAt)) / DAY_MS);
+  // Kung claimed na, hanggang claimedAt lang ang bilang (hindi na lalaki)
+  const endDate = order.status === "claimed" && order.claimedAt ? order.claimedAt : now;
+  const daysUnclaimed = Math.floor((new Date(endDate) - new Date(readyAt)) / DAY_MS);
   const chargeableDays = Math.max(0, daysUnclaimed - FREE_STORAGE_DAYS);
 
   return { daysUnclaimed, storageFee: chargeableDays * STORAGE_FEE_PER_DAY };

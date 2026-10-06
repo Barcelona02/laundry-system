@@ -60,3 +60,69 @@ GET {{baseUrl}}/orders/{{newOrder.response.body._id}}
 
 ### 10. List all orders
 GET {{baseUrl}}/orders
+
+### 11. Skip to claimed -> 400
+PATCH {{baseUrl}}/orders/{{newOrder.response.body._id}}/status
+Content-Type: application/json
+
+{ "status": "claimed" }
+
+### 12. Downpayment 100 cash -> 201 (balance 230)
+POST {{baseUrl}}/payments
+Content-Type: application/json
+
+{ "order": "{{newOrder.response.body._id}}", "amount": 100, "method": "cash" }
+
+### 13. Overpay -> 400
+POST {{baseUrl}}/payments
+Content-Type: application/json
+
+{ "order": "{{newOrder.response.body._id}}", "amount": 500, "method": "cash" }
+
+### 14. GCash without reference -> 400
+POST {{baseUrl}}/payments
+Content-Type: application/json
+
+{ "order": "{{newOrder.response.body._id}}", "amount": 50, "method": "gcash" }
+
+### 15. Status -> washing
+PATCH {{baseUrl}}/orders/{{newOrder.response.body._id}}/status
+Content-Type: application/json
+
+{ "status": "washing" }
+
+### 16. Status -> drying
+PATCH {{baseUrl}}/orders/{{newOrder.response.body._id}}/status
+Content-Type: application/json
+
+{ "status": "drying" }
+
+### 17. Status -> ready
+PATCH {{baseUrl}}/orders/{{newOrder.response.body._id}}/status
+Content-Type: application/json
+
+{ "status": "ready" }
+
+### 18. Claim with balance -> 400
+PATCH {{baseUrl}}/orders/{{newOrder.response.body._id}}/status
+Content-Type: application/json
+
+{ "status": "claimed" }
+
+### 19. Pay remaining 230 via GCash -> 201 (balance 0)
+POST {{baseUrl}}/payments
+Content-Type: application/json
+
+{ "order": "{{newOrder.response.body._id}}", "amount": 230, "method": "gcash", "reference": "GC1234567890" }
+
+### 20. Claim -> 200
+PATCH {{baseUrl}}/orders/{{newOrder.response.body._id}}/status
+Content-Type: application/json
+
+{ "status": "claimed" }
+
+### 21. Change claimed order -> 400
+PATCH {{baseUrl}}/orders/{{newOrder.response.body._id}}/status
+Content-Type: application/json
+
+{ "status": "washing" }

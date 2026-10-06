@@ -6,6 +6,8 @@ const Payment = require("../models/Payment");
 const Machine = require("../models/Machine");
 const httpError = require("../utils/httpError");
 const {
+  ALLOWED_TRANSITIONS,
+  canTransition,
   computePricing,
   computePromisedAt,
   computeBalance,
@@ -163,6 +165,47 @@ router.delete("/:id", async (req, res) => {
 
   await order.deleteOne();
   res.json({ message: "Order deleted" });
+});
+
+// PATCH /api/orders/:id/status   body: { "status": "washing" }
+router.patch("/:id/status", async (req, res) => {
+  const { status } = req.body;
+  if (!status) throw httpError(400, "Status is required");
+  if (!Order.STATUSES.includes(status)) throw httpError(400, `Invalid status: ${status}`);
+
+  const order = await Order.findById(req.params.id);
+  if (!order) throw httpError(404, "Order not found");
+
+  // Rule 1: bawal mag-skip o bumalik
+  if (!canTransition(order.status, status)) {
+    const allowed = ALLOWED_TRANSITIONS[order.status];
+    const message = allowed.length
+      ? `Cannot move from ${order.status} to ${status}. Next allowed: ${allowed.join(", ")}`
+      : `Order is already ${order.status} and can no longer change`;
+    throw httpError(400, message);
+  }
+
+  // Rule 2: bawal i-claim kapag may balance pa
+  if (status === "claimed") {
+    const payments = await Payment.find({ order: order._id });
+    const { balance } = computeBalance(order, payments);
+    if (balance > 0) {
+      throw httpError(400, `Cannot claim: remaining balance is ₱${balance}`);
+    }
+    order.claimedAt = new Date();
+  }
+
+  // Rule 3: bawat lipat ng stage, ibalik sa "available" ang machine
+  if (order.machine) {
+    await Machine.findByIdAndUpdate(order.machine, { status: "available", currentOrder: null });
+    order.machine = null;
+  }
+
+  order.status = status;
+  order.statusHistory.push({ status, changedAt: new Date() });
+  await order.save();
+
+  res.json(order);
 });
 
 module.exports = router;
