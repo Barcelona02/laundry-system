@@ -37,7 +37,7 @@ export default function TrackOrder() {
       </header>
 
       <main className="mx-auto max-w-3xl px-4 pt-6 pb-16">
-        <h1 className="text-center text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">Track your laundry</h1>
+        <h1 className="text-center text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Track your laundry</h1>
         <p className="mt-2 text-center text-slate-600">Enter the order code printed on your claim slip.</p>
 
         <form onSubmit={handleSubmit} className="mx-auto mt-6 flex max-w-md flex-col gap-2 sm:flex-row">
@@ -62,15 +62,15 @@ export default function TrackOrder() {
             <div className="grid gap-6 md:grid-cols-5">
               <Card className="md:col-span-3">
                 <p className="text-sm text-slate-500">Hi {data.customerFirstName}, your order</p>
-                <p className="text-2xl font-extrabold text-slate-900">{data.orderCode}</p>
+                <p className="text-2xl font-bold text-slate-900">{data.orderCode}</p>
                 <p className="mt-1 text-sm text-slate-600">
                   {data.service ?? 'Laundry'} · Qty {data.quantity}
                 </p>
-                <p className="mt-4 inline-flex rounded-full bg-brand-100 px-3 py-1 text-sm font-semibold text-brand-700">
+                <p className="mt-4 inline-flex rounded-full bg-accent-100 px-3 py-1 text-sm font-semibold text-accent-700">
                   {STATUS_LABEL[data.status]}
                 </p>
                 {data.isLate && (
-                  <p className="mt-3 flex items-center gap-2 text-sm text-red-600">
+                  <p className="mt-3 flex items-center gap-2 text-sm text-due-600">
                     <AlertTriangle size={16} /> Running behind schedule. Sorry for the wait!
                   </p>
                 )}
@@ -80,7 +80,7 @@ export default function TrackOrder() {
               </Card>
 
               <Card className="md:col-span-2">
-                <h2 className="font-bold text-slate-900">Pickup & payment</h2>
+                <h2 className="font-semibold text-slate-900">Pickup & payment</h2>
                 <dl className="mt-4 space-y-3 text-sm">
                   <div>
                     <dt className="text-slate-500">{data.claimedAt ? 'Claimed on' : 'Expected ready by'}</dt>
@@ -93,7 +93,7 @@ export default function TrackOrder() {
                   {data.storageFee > 0 && (
                     <div className="flex justify-between">
                       <dt className="text-slate-600">Includes storage fee</dt>
-                      <dd className="font-semibold text-accent-600">{formatPeso(data.storageFee)}</dd>
+                      <dd className="font-semibold text-due-600">{formatPeso(data.storageFee)}</dd>
                     </div>
                   )}
                   <div className="flex justify-between">
@@ -102,13 +102,13 @@ export default function TrackOrder() {
                   </div>
                   <div className="flex justify-between border-t border-slate-100 pt-3 text-base">
                     <dt className="font-bold text-slate-900">Balance</dt>
-                    <dd className={`font-extrabold ${data.balance > 0 ? 'text-accent-600' : 'text-brand-700'}`}>
+                    <dd className={`font-bold ${data.balance > 0 ? 'text-due-600' : 'text-brand-700'}`}>
                       {data.balance > 0 ? formatPeso(data.balance) : 'Fully paid'}
                     </dd>
                   </div>
                 </dl>
                 {data.status === 'ready' && (
-                  <p className="mt-4 rounded-xl bg-brand-50 px-4 py-3 text-xs text-brand-800">
+                  <p className="mt-4 rounded-2xl bg-brand-50 px-4 py-3 text-xs text-brand-800">
                     Storage is free for 3 days once ready. After that, ₱20 per day is added.
                   </p>
                 )}

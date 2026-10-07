@@ -17,9 +17,9 @@ import type { Machine, MachineAvailability, MachineStatus, MachineType, MachineT
 import { inputClass } from '../utils/styles'
 
 const STATUS_STYLE: Record<MachineStatus, { label: string; className: string }> = {
-  available: { label: 'Available', className: 'bg-brand-100 text-brand-700' },
-  in_use: { label: 'In use', className: 'bg-sky-100 text-sky-700' },
-  maintenance: { label: 'Maintenance', className: 'bg-amber-100 text-amber-700' },
+  available: { label: 'Available', className: 'bg-emerald-50 text-emerald-700' },
+  in_use: { label: 'In use', className: 'bg-brand-100 text-brand-700' },
+  maintenance: { label: 'Maintenance', className: 'bg-amber-50 text-amber-700' },
 }
 
 type Filter = 'all' | MachineType
@@ -81,7 +81,7 @@ export default function Machines() {
             <SummaryCard title="Dryers" icon={Wind} summary={availabilityReq.data.dryer} />
             <Card>
               <p className="text-sm font-medium text-slate-500">Utilization</p>
-              <p className="mt-2 text-3xl font-extrabold text-slate-900">{availabilityReq.data.utilizationRate}%</p>
+              <p className="mt-2 text-3xl font-bold text-slate-900">{availabilityReq.data.utilizationRate}%</p>
               <div className="mt-3 h-2.5 rounded-full bg-slate-100">
                 <div className="h-full rounded-full bg-brand-500" style={{ width: `${availabilityReq.data.utilizationRate}%` }} />
               </div>
@@ -91,7 +91,7 @@ export default function Machines() {
         )
       )}
 
-      <div className="mb-4 inline-flex rounded-xl bg-white p-1 shadow-card" role="tablist">
+      <div className="mb-4 inline-flex rounded-2xl bg-white p-1 shadow-card" role="tablist">
         {(['all', 'washer', 'dryer'] as Filter[]).map((f) => (
           <button
             key={f}
@@ -127,11 +127,11 @@ export default function Machines() {
               <Card key={m._id} className="flex flex-col">
                 <div className="flex items-start justify-between gap-3">
                   <span className="flex items-center gap-3">
-                    <span className="grid size-11 place-items-center rounded-xl bg-brand-50 text-brand-600">
+                    <span className="grid size-11 place-items-center rounded-2xl bg-brand-50 text-brand-600">
                       <Icon size={22} />
                     </span>
                     <span>
-                      <span className="block text-lg font-extrabold text-slate-900">{m.code}</span>
+                      <span className="block text-lg font-bold text-slate-900">{m.code}</span>
                       <span className="text-sm text-slate-500 capitalize">
                         {m.type} · {m.capacityKg} kg
                       </span>
@@ -161,7 +161,7 @@ export default function Machines() {
                   </Button>
                   <Button
                     variant="ghost"
-                    className="px-2.5 text-red-600 hover:bg-red-50"
+                    className="px-2.5 text-due-600 hover:bg-due-50"
                     onClick={() => setToDelete(m)}
                     disabled={m.status === 'in_use'}
                     aria-label={`Delete ${m.code}`}
@@ -205,7 +205,7 @@ function SummaryCard({ title, icon: Icon, summary }: { title: string; icon: type
         <p className="text-sm font-medium text-slate-500">{title}</p>
         <Icon size={18} className="text-brand-600" />
       </div>
-      <p className="mt-2 text-3xl font-extrabold text-slate-900">
+      <p className="mt-2 text-3xl font-bold text-slate-900">
         {summary.available}
         <span className="text-base font-semibold text-slate-400"> / {summary.total} free</span>
       </p>
@@ -255,7 +255,7 @@ function MachineFormDialog({ machine, onClose, onSaved }: { machine: Machine | n
         className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-card bg-white p-6 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-lg font-bold text-slate-900">{machine ? `Edit ${machine.code}` : 'Add machine'}</h2>
+        <h2 className="text-lg font-semibold text-slate-900">{machine ? `Edit ${machine.code}` : 'Add machine'}</h2>
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="mt-5 space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <FormField label="Type" error={errors.type?.message}>

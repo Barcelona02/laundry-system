@@ -6,7 +6,7 @@ import { STATUS_FLOW, STATUS_LABEL } from '../../utils/orderRules'
 // Progress ng order: received -> washing -> drying -> ready -> claimed
 export function StatusSteps({ status, history }: { status: OrderStatus; history: StatusHistoryEntry[] }) {
   if (status === 'cancelled') {
-    return <p className="rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">This order was cancelled.</p>
+    return <p className="rounded-2xl bg-due-50 px-4 py-3 text-sm font-semibold text-due-600">This order was cancelled.</p>
   }
 
   const currentIndex = STATUS_FLOW.indexOf(status)

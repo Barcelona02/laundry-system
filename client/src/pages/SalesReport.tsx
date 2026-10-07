@@ -51,7 +51,7 @@ export default function SalesReport() {
         title="Sales Report"
         description="Payments collected per day, in Philippine time."
         action={
-          <div className="inline-flex rounded-xl bg-white p-1 shadow-card">
+          <div className="inline-flex rounded-2xl bg-white p-1 shadow-card">
             {RANGES.map((r) => (
               <button
                 key={r}
@@ -83,7 +83,7 @@ export default function SalesReport() {
           </div>
 
           <Card className="mt-6">
-            <h2 className="font-bold text-slate-900">Daily sales</h2>
+            <h2 className="font-semibold text-slate-900">Daily sales</h2>
             <p className="text-sm text-slate-500">Hover or tap a bar to see the exact amount.</p>
             {report.total === 0 ? (
               <div className="mt-4">
@@ -132,7 +132,7 @@ export default function SalesReport() {
 
           <div className="mt-6 grid gap-6 lg:grid-cols-3">
             <Card>
-              <h2 className="mb-4 font-bold text-slate-900">By payment method</h2>
+              <h2 className="mb-4 font-semibold text-slate-900">By payment method</h2>
               {paymentsReq.loading && !paymentsReq.data ? (
                 <LoadingState />
               ) : paymentsReq.error ? (

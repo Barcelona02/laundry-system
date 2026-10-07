@@ -1,33 +1,52 @@
 @import "tailwindcss";
 
-/* Sariling theme ng app: kulay, font, at radius */
+/* Sariling theme ng app: Soft Pastel Clean */
 @theme {
   --font-sans: "Plus Jakarta Sans", system-ui, "Segoe UI", sans-serif;
+  --font-display: "Outfit", "Plus Jakarta Sans", system-ui, sans-serif;
 
-  /* Primary: malalim na teal (malinis na tubig) */
-  --color-brand-50: #eefbf9;
-  --color-brand-100: #d4f4ef;
-  --color-brand-200: #aae8df;
-  --color-brand-300: #74d4c9;
-  --color-brand-400: #3fb8ad;
-  --color-brand-500: #229c93;
-  --color-brand-600: #187d77;
-  --color-brand-700: #176561;
-  --color-brand-800: #17514e;
-  --color-brand-900: #164442;
+  /* Primary: sky blue (malinis na tubig) */
+  --color-brand-50: #f1f7fe;
+  --color-brand-100: #e2effc;
+  --color-brand-200: #c6e0f9;
+  --color-brand-300: #9dcaf4;
+  --color-brand-400: #6aaeec;
+  --color-brand-500: #4893e0;
+  --color-brand-600: #2f78c8;
+  --color-brand-700: #2862a5;
+  --color-brand-800: #255287;
+  --color-brand-900: #23466f;
 
-  /* Accent: mainit na coral para sa call-to-action */
-  --color-accent-400: #ff8a6b;
-  --color-accent-500: #f8693f;
-  --color-accent-600: #e44f24;
+  /* Accent: lavender (dekorasyon at "Rush") */
+  --color-accent-50: #f6f4fe;
+  --color-accent-100: #eeeafd;
+  --color-accent-200: #ded7fb;
+  --color-accent-300: #c6b9f7;
+  --color-accent-400: #aa96f0;
+  --color-accent-500: #8f76e5;
+  --color-accent-600: #7a5bd6;
+  --color-accent-700: #6849bb;
 
-  /* Neutral background ng app */
-  --color-canvas: #f6f8f7;
+  /* Due: soft rose para sa balance at mga babala */
+  --color-due-50: #fdf2f5;
+  --color-due-100: #fbe4eb;
+  --color-due-500: #e0577d;
+  --color-due-600: #c63d66;
 
-  --radius-card: 1rem;
-  --shadow-card: 0 1px 2px rgb(16 24 40 / 0.04), 0 4px 16px rgb(16 24 40 / 0.06);
+  /* Background ng app: halos puti na may kaunting asul */
+  --color-canvas: #f7f9fd;
+
+  --radius-card: 1.5rem;
+  --shadow-card: 0 1px 2px rgb(35 70 111 / 0.04), 0 10px 30px -12px rgb(35 70 111 / 0.12);
+  --shadow-soft: 0 6px 20px -6px rgb(47 120 200 / 0.35);
 }
 
 body {
-  @apply bg-canvas font-sans text-slate-800 antialiased;
+  @apply bg-canvas font-sans text-slate-700 antialiased;
+}
+
+h1,
+h2,
+h3 {
+  @apply font-display;
 }

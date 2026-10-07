@@ -108,7 +108,7 @@ export default function OrderDetail() {
               </LinkButton>
             )}
             {canDelete && (
-              <Button variant="secondary" className="text-red-600" onClick={() => setPending({ kind: 'deleteOrder' })}>
+              <Button variant="secondary" className="text-due-600" onClick={() => setPending({ kind: 'deleteOrder' })}>
                 <Trash2 size={16} /> Delete
               </Button>
             )}
@@ -119,12 +119,12 @@ export default function OrderDetail() {
       <div className="mb-6 flex flex-wrap items-center gap-2">
         <StatusBadge status={order.status} />
         {order.isRush && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-accent-400/15 px-2.5 py-1 text-xs font-semibold text-accent-600">
+          <span className="inline-flex items-center gap-1 rounded-full bg-accent-100 px-2.5 py-1 text-xs font-semibold text-accent-700">
             <Zap size={12} /> Rush
           </span>
         )}
         {order.isLate && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-1 text-xs font-semibold text-red-700">
+          <span className="inline-flex items-center gap-1 rounded-full bg-due-100 px-2.5 py-1 text-xs font-semibold text-due-600">
             <AlertTriangle size={12} /> Late
           </span>
         )}
@@ -139,7 +139,7 @@ export default function OrderDetail() {
         <div className="space-y-6 lg:col-span-2">
           {/* Status at mga susunod na hakbang */}
           <Card>
-            <h2 className="mb-5 font-bold text-slate-900">Progress</h2>
+            <h2 className="mb-5 font-semibold text-slate-900">Progress</h2>
             <StatusSteps status={order.status} history={order.statusHistory} />
             {nextStatuses.length > 0 && (
               <div className="mt-6 flex flex-wrap gap-2 border-t border-slate-100 pt-5">
@@ -150,7 +150,7 @@ export default function OrderDetail() {
                     <Button
                       key={s}
                       variant={s === 'cancelled' ? 'secondary' : 'primary'}
-                      className={s === 'cancelled' ? 'text-red-600' : ''}
+                      className={s === 'cancelled' ? 'text-due-600' : ''}
                       disabled={blocked}
                       onClick={() => setPending({ kind: 'status', status: s })}
                     >
@@ -159,7 +159,7 @@ export default function OrderDetail() {
                   )
                 })}
                 {nextStatuses.includes('claimed') && order.balance > 0 && (
-                  <p className="w-full text-sm text-accent-600">Collect the remaining {formatPeso(order.balance)} before releasing.</p>
+                  <p className="w-full text-sm text-due-600">Collect the remaining {formatPeso(order.balance)} before releasing.</p>
                 )}
               </div>
             )}
@@ -169,7 +169,7 @@ export default function OrderDetail() {
 
           {/* Detalye ng order */}
           <Card>
-            <h2 className="mb-4 font-bold text-slate-900">Order details</h2>
+            <h2 className="mb-4 font-semibold text-slate-900">Order details</h2>
             <dl className="grid gap-4 text-sm sm:grid-cols-2">
               <Detail label="Customer">
                 {order.customer ? (
@@ -202,7 +202,7 @@ export default function OrderDetail() {
         {/* Bayarin */}
         <div className="space-y-6">
           <Card>
-            <h2 className="font-bold text-slate-900">Billing</h2>
+            <h2 className="font-semibold text-slate-900">Billing</h2>
             <dl className="mt-4 space-y-2.5 text-sm">
               <Row label="Subtotal" value={formatPeso(order.subtotal)} />
               <Row label="Add-ons" value={formatPeso(order.addOnsTotal)} />
@@ -218,7 +218,7 @@ export default function OrderDetail() {
             </div>
             <div className="mt-4 flex items-baseline justify-between">
               <span className="text-sm font-semibold text-slate-700">Balance</span>
-              <span className={`text-2xl font-extrabold ${order.balance > 0 ? 'text-accent-600' : 'text-brand-700'}`}>
+              <span className={`text-2xl font-bold ${order.balance > 0 ? 'text-due-600' : 'text-brand-700'}`}>
                 {order.status === 'cancelled' ? '—' : order.balance > 0 ? formatPeso(order.balance) : 'Fully paid'}
               </span>
             </div>
@@ -228,7 +228,7 @@ export default function OrderDetail() {
           {canPay && <PaymentForm key={order.balance} orderId={order._id} balance={order.balance} onPaid={refetch} />}
 
           <Card>
-            <h2 className="mb-3 font-bold text-slate-900">Payments</h2>
+            <h2 className="mb-3 font-semibold text-slate-900">Payments</h2>
             {order.payments.length === 0 ? (
               <p className="text-sm text-slate-500">No payments recorded yet.</p>
             ) : (
@@ -245,7 +245,7 @@ export default function OrderDetail() {
                     {order.status !== 'claimed' && (
                       <Button
                         variant="ghost"
-                        className="px-2.5 text-red-600 hover:bg-red-50"
+                        className="px-2.5 text-due-600 hover:bg-due-50"
                         aria-label="Remove payment"
                         onClick={() => setPending({ kind: 'deletePayment', payment: p })}
                       >
@@ -321,7 +321,7 @@ function PaymentForm({ orderId, balance, onPaid }: { orderId: string; balance: n
 
   return (
     <Card>
-      <h2 className="mb-4 font-bold text-slate-900">Record payment</h2>
+      <h2 className="mb-4 font-semibold text-slate-900">Record payment</h2>
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
         <FormField label="Amount (₱)" error={errors.amount?.message}>
           <input
@@ -385,7 +385,7 @@ function MachinePanel({ order, type, onAssigned }: { order: OrderDetailType; typ
 
   return (
     <Card>
-      <h2 className="mb-1 flex items-center gap-2 font-bold text-slate-900">
+      <h2 className="mb-1 flex items-center gap-2 font-semibold text-slate-900">
         <WashingMachine size={18} className="text-brand-600" /> {type === 'washer' ? 'Washer' : 'Dryer'}
       </h2>
       {order.machine ? (
@@ -418,7 +418,7 @@ function MachinePanel({ order, type, onAssigned }: { order: OrderDetailType; typ
               </Button>
             </div>
           ) : (
-            <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
+            <p className="rounded-2xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
               No {type}s are available right now. Check the{' '}
               <Link to="/machines" className="font-semibold underline">
                 machines page

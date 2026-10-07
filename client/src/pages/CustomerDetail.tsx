@@ -48,7 +48,7 @@ export default function CustomerDetail() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="space-y-4">
-          <h2 className="font-bold text-slate-900">Contact details</h2>
+          <h2 className="font-semibold text-slate-900">Contact details</h2>
           <p className="flex items-start gap-3 text-sm text-slate-600">
             <Phone size={18} className="mt-0.5 shrink-0 text-brand-500" /> {customer.phone}
           </p>
@@ -74,7 +74,7 @@ export default function CustomerDetail() {
       </div>
 
       <div className="mt-8 mb-4 flex items-center justify-between gap-4">
-        <h2 className="text-lg font-bold text-slate-900">Order history</h2>
+        <h2 className="text-lg font-semibold text-slate-900">Order history</h2>
         <LinkButton to={`/orders/new?customer=${customer._id}`}>
           <Plus size={18} /> New order
         </LinkButton>
@@ -104,7 +104,7 @@ export default function CustomerDetail() {
                 <span className="text-right text-sm">
                   <span className="block font-semibold text-slate-900">{formatPeso(o.amountDue)}</span>
                   {o.balance > 0 && o.status !== 'cancelled' && (
-                    <span className="block text-xs text-accent-600">{formatPeso(o.balance)} due</span>
+                    <span className="block text-xs text-due-600">{formatPeso(o.balance)} due</span>
                   )}
                 </span>
                 <StatusBadge status={o.status} />

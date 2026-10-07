@@ -165,7 +165,7 @@ export default function OrderForm() {
           </div>
 
           {selectedService?.description && (
-            <p className="rounded-xl bg-brand-50 px-4 py-3 text-sm text-brand-800">{selectedService.description}</p>
+            <p className="rounded-2xl bg-brand-50 px-4 py-3 text-sm text-brand-800">{selectedService.description}</p>
           )}
 
           <fieldset>
@@ -174,7 +174,7 @@ export default function OrderForm() {
               {ADD_ONS.map((a) => (
                 <label
                   key={a}
-                  className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-slate-200 px-4 py-3 text-sm has-checked:border-brand-500 has-checked:bg-brand-50"
+                  className="flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-slate-200 px-4 py-3 text-sm has-checked:border-brand-500 has-checked:bg-brand-50"
                 >
                   <span className="flex items-center gap-3">
                     <input type="checkbox" value={a} {...register('addOns')} className="size-4 accent-brand-600" />
@@ -186,7 +186,7 @@ export default function OrderForm() {
             </div>
           </fieldset>
 
-          <label className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-slate-200 px-4 py-3 has-checked:border-accent-500 has-checked:bg-accent-400/10">
+          <label className="flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-slate-200 px-4 py-3 has-checked:border-accent-400 has-checked:bg-accent-50">
             <span className="flex items-center gap-3">
               <input type="checkbox" {...register('isRush')} className="size-4 accent-accent-500" />
               <span>
@@ -206,7 +206,7 @@ export default function OrderForm() {
         {/* Live na computation ng presyo */}
         <div className="lg:sticky lg:top-6 lg:self-start">
           <Card>
-            <h2 className="font-bold text-slate-900">Price summary</h2>
+            <h2 className="font-semibold text-slate-900">Price summary</h2>
             {selectedService ? (
               <dl className="mt-4 space-y-2.5 text-sm">
                 <div className="flex justify-between gap-3">
@@ -228,7 +228,7 @@ export default function OrderForm() {
                 </div>
                 <div className="flex justify-between gap-3 border-t border-slate-100 pt-3 text-base">
                   <dt className="font-bold text-slate-900">Total</dt>
-                  <dd className="font-extrabold text-brand-700">{formatPeso(total)}</dd>
+                  <dd className="font-bold text-brand-700">{formatPeso(total)}</dd>
                 </div>
                 <p className="pt-1 text-xs text-slate-500">
                   Ready in about {turnaroundHours} hours

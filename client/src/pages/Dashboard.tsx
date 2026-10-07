@@ -1,4 +1,4 @@
-import { AlertTriangle, Clock, PackageCheck, Plus, Wallet, WashingMachine } from 'lucide-react'
+import { AlertTriangle, Clock, PackageCheck, Plus, Receipt, Scale, Wallet, WashingMachine } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { LinkButton } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
@@ -35,18 +35,20 @@ export default function Dashboard() {
       />
 
       <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Sales today" value={formatPeso(stats.sales.today)} hint={`${formatPeso(stats.sales.thisMonth)} this month`} icon={Wallet} />
+        <StatCard label="Sales today" value={formatPeso(stats.sales.today)} hint={`${formatPeso(stats.sales.thisMonth)} this month`} icon={Wallet} tone="sky" />
         <StatCard
           label="Active orders"
           value={String(stats.orders.active)}
           hint="Received, washing, or drying"
           icon={WashingMachine}
+          tone="lavender"
         />
         <StatCard
           label="Ready for pickup"
           value={String(stats.orders.unclaimed)}
           hint={stats.receivables.pendingStorageFees > 0 ? `${formatPeso(stats.receivables.pendingStorageFees)} storage fees` : 'No storage fees yet'}
           icon={PackageCheck}
+          tone="mint"
         />
         <StatCard
           label="Late orders"
@@ -60,7 +62,7 @@ export default function Dashboard() {
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <div className="mb-5 flex items-center justify-between">
-            <h2 className="font-bold text-slate-900">Orders by status</h2>
+            <h2 className="font-semibold text-slate-900">Orders by status</h2>
             <span className="text-sm text-slate-500">{stats.orders.total} total</span>
           </div>
           <ul className="space-y-3">
@@ -72,7 +74,7 @@ export default function Dashboard() {
                     <span className="truncate text-sm text-slate-600 group-hover:text-brand-600">{STATUS_LABEL[s]}</span>
                     <span className="h-2.5 rounded-full bg-slate-100">
                       <span
-                        className="block h-full rounded-full bg-brand-500 transition-all"
+                        className="block h-full rounded-full bg-gradient-to-r from-brand-300 to-brand-500 transition-all"
                         style={{ width: `${(count / maxStatusCount) * 100}%` }}
                       />
                     </span>
@@ -84,9 +86,9 @@ export default function Dashboard() {
           </ul>
         </Card>
 
-        <Card>
-          <h2 className="font-bold text-slate-900">Money to collect</h2>
-          <p className="mt-3 text-3xl font-extrabold text-accent-600">{formatPeso(stats.receivables.unpaidBalance)}</p>
+        <Card className="bg-gradient-to-br from-white via-white to-due-50">
+          <h2 className="font-semibold text-slate-900">Money to collect</h2>
+          <p className="mt-3 font-display text-4xl font-semibold text-due-600">{formatPeso(stats.receivables.unpaidBalance)}</p>
           <p className="text-sm text-slate-500">Unpaid balance across all open orders</p>
           <LinkButton to="/orders?unpaid=true" variant="secondary" className="mt-4 w-full">
             View unpaid orders
@@ -98,7 +100,7 @@ export default function Dashboard() {
               <span className="font-semibold text-slate-900">{stats.machines.utilizationRate}%</span>
             </div>
             <div className="mt-2 h-2.5 rounded-full bg-slate-100">
-              <div className="h-full rounded-full bg-brand-500" style={{ width: `${stats.machines.utilizationRate}%` }} />
+              <div className="h-full rounded-full bg-gradient-to-r from-accent-300 to-accent-500" style={{ width: `${stats.machines.utilizationRate}%` }} />
             </div>
             <p className="mt-2 text-xs text-slate-500">
               {stats.machines.inUse} in use · {stats.machines.maintenance} under maintenance · {stats.machines.total} total
@@ -108,14 +110,14 @@ export default function Dashboard() {
       </div>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
-        <StatCard label="Avg. turnaround" value={`${stats.averages.turnaroundHours} hrs`} hint="From received to ready" icon={Clock} />
-        <StatCard label="Avg. load size" value={`${stats.averages.kgPerOrder} kg`} hint="Per-kg services only" />
-        <StatCard label="Avg. order value" value={formatPeso(stats.averages.orderValue)} hint="Excluding cancelled orders" />
+        <StatCard label="Avg. turnaround" value={`${stats.averages.turnaroundHours} hrs`} hint="From received to ready" icon={Clock} tone="lavender" />
+        <StatCard label="Avg. load size" value={`${stats.averages.kgPerOrder} kg`} hint="Per-kg services only" icon={Scale} tone="sky" />
+        <StatCard label="Avg. order value" value={formatPeso(stats.averages.orderValue)} hint="Excluding cancelled orders" icon={Receipt} tone="mint" />
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <Card>
-          <h2 className="mb-4 font-bold text-slate-900">Top services</h2>
+          <h2 className="mb-4 font-semibold text-slate-900">Top services</h2>
           {stats.topServices.length === 0 ? (
             <EmptyState title="No orders yet" />
           ) : (
@@ -125,7 +127,7 @@ export default function Dashboard() {
                   <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-slate-100 text-xs font-bold text-slate-600">{i + 1}</span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-semibold text-slate-900">{s.name}</span>
-                    <span className="text-xs text-slate-500">{s.orders} orders</span>
+                    <span className="text-xs text-slate-500">{s.orders} order{s.orders === 1 ? '' : 's'}</span>
                   </span>
                   <span className="text-sm font-semibold text-slate-900">{formatPeso(s.billed)}</span>
                 </li>
@@ -135,7 +137,7 @@ export default function Dashboard() {
         </Card>
 
         <Card>
-          <h2 className="mb-4 font-bold text-slate-900">Top customers</h2>
+          <h2 className="mb-4 font-semibold text-slate-900">Top customers</h2>
           {stats.topCustomers.length === 0 ? (
             <EmptyState title="No customers yet" />
           ) : (
@@ -146,7 +148,7 @@ export default function Dashboard() {
                     <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-slate-100 text-xs font-bold text-slate-600">{i + 1}</span>
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-sm font-semibold">{c.name}</span>
-                      <span className="text-xs text-slate-500">{c.orders} orders</span>
+                      <span className="text-xs text-slate-500">{c.orders} order{c.orders === 1 ? '' : 's'}</span>
                     </span>
                     <span className="text-sm font-semibold text-slate-900">{formatPeso(c.totalSpent)}</span>
                   </Link>

@@ -166,11 +166,11 @@ export default function OrdersList() {
                       <span className="flex items-center gap-1.5 text-slate-700">
                         {formatDate(o.promisedAt)}
                         {o.isRush && <Zap size={14} className="text-accent-500" aria-label="Rush" />}
-                        {o.isLate && <AlertTriangle size={14} className="text-red-500" aria-label="Late" />}
+                        {o.isLate && <AlertTriangle size={14} className="text-due-500" aria-label="Late" />}
                       </span>
                     </td>
                     <td className="px-5 py-3.5 text-right font-semibold text-slate-900">{formatPeso(o.amountDue)}</td>
-                    <td className={`px-5 py-3.5 text-right font-semibold ${o.balance > 0 ? 'text-accent-600' : 'text-slate-400'}`}>
+                    <td className={`px-5 py-3.5 text-right font-semibold ${o.balance > 0 ? 'text-due-600' : 'text-slate-400'}`}>
                       {o.status === 'cancelled' ? '—' : formatPeso(o.balance)}
                     </td>
                     <td className="px-5 py-3.5">
@@ -198,12 +198,12 @@ export default function OrdersList() {
                     <span className="flex items-center gap-1.5 text-slate-500">
                       Pickup {formatDate(o.promisedAt)}
                       {o.isRush && <Zap size={14} className="text-accent-500" />}
-                      {o.isLate && <AlertTriangle size={14} className="text-red-500" />}
+                      {o.isLate && <AlertTriangle size={14} className="text-due-500" />}
                     </span>
                     <span className="text-right">
                       <span className="block font-semibold text-slate-900">{formatPeso(o.amountDue)}</span>
                       {o.balance > 0 && o.status !== 'cancelled' && (
-                        <span className="block text-xs text-accent-600">{formatPeso(o.balance)} due</span>
+                        <span className="block text-xs text-due-600">{formatPeso(o.balance)} due</span>
                       )}
                     </span>
                   </div>

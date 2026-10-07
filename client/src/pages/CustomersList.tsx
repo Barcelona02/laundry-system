@@ -101,7 +101,7 @@ export default function CustomersList() {
                     </LinkButton>
                     <Button
                       variant="ghost"
-                      className="px-2.5 text-red-600 hover:bg-red-50"
+                      className="px-2.5 text-due-600 hover:bg-due-50"
                       onClick={() => setToDelete(c)}
                       aria-label={`Delete ${c.name}`}
                     >

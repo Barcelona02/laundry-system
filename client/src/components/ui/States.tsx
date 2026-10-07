@@ -15,9 +15,9 @@ export function LoadingState({ label = 'Loading...' }: { label?: string }) {
 // Ipinapakita kapag pumalya ang request, may "Try again" button
 export function ErrorState({ message, onRetry }: { message: string; onRetry?: () => void }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-3 rounded-card border border-red-100 bg-red-50 px-6 py-12 text-center">
-      <AlertTriangle className="text-red-500" size={32} />
-      <p className="font-semibold text-red-700">{message}</p>
+    <div className="flex flex-col items-center justify-center gap-3 rounded-card border border-due-100 bg-due-50 px-6 py-12 text-center">
+      <AlertTriangle className="text-due-500" size={32} />
+      <p className="font-semibold text-due-600">{message}</p>
       {onRetry && (
         <Button variant="secondary" onClick={onRetry}>
           Try again
