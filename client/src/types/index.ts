@@ -72,6 +72,19 @@ export interface Machine {
   currentOrder: { _id: string; orderCode: string; status: OrderStatus } | null
 }
 
+// Mga computed field na idinadagdag ng server sa bawat order (GET /orders)
+export interface OrderBalance {
+  amountPaid: number
+  storageFee: number
+  daysUnclaimed: number
+  amountDue: number
+  balance: number
+  isPaid: boolean
+  isLate: boolean
+}
+
+export type OrderWithBalance = Order & OrderBalance
+
 // Laging { message } ang error format ng server
 export interface ApiError {
   message: string
