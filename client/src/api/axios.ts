@@ -12,7 +12,12 @@ export function getErrorMessage(error: unknown): string {
     const data = error.response?.data
     // Mongoose validation: { message: "Validation failed", errors: [...] }
     if (Array.isArray(data?.errors) && data.errors.length) return data.errors.join('. ')
-    return data?.message || error.message
+    if (data?.message) return data.message
+    // Walang sagot mula sa Express (patay ang server o walang .env)
+    if (!error.response || error.response.status >= 500) {
+      return 'Cannot reach the server. Make sure the backend is running and connected to MongoDB.'
+    }
+    return error.message
   }
   return 'Something went wrong'
 }
