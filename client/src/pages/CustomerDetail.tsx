@@ -4,6 +4,7 @@ import { LinkButton } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { PageHeader } from '../components/ui/PageHeader'
 import { EmptyState, ErrorState, LoadingState } from '../components/ui/States'
+import { StatCard } from '../components/ui/StatCard'
 import { StatusBadge } from '../components/ui/StatusBadge'
 import { useFetch } from '../hooks/useFetch'
 import type { Customer, OrderWithBalance } from '../types'
@@ -60,13 +61,13 @@ export default function CustomerDetail() {
         </Card>
 
         <div className="grid grid-cols-2 gap-4 lg:col-span-2 lg:grid-cols-3">
-          <Stat label="Total orders" value={String(validOrders.length)} />
-          <Stat label="Active orders" value={String(activeOrders)} />
-          <Stat label="Total billed" value={formatPeso(totalSpent)} />
-          <Stat
+          <StatCard label="Total orders" value={String(validOrders.length)} />
+          <StatCard label="Active orders" value={String(activeOrders)} />
+          <StatCard label="Total billed" value={formatPeso(totalSpent)} />
+          <StatCard
             label="Outstanding balance"
             value={formatPeso(outstanding)}
-            highlight={outstanding > 0}
+            tone={outstanding > 0 ? 'warning' : 'default'}
             className="col-span-2 lg:col-span-3"
           />
         </div>
@@ -113,24 +114,5 @@ export default function CustomerDetail() {
         </Card>
       )}
     </>
-  )
-}
-
-function Stat({
-  label,
-  value,
-  highlight = false,
-  className = '',
-}: {
-  label: string
-  value: string
-  highlight?: boolean
-  className?: string
-}) {
-  return (
-    <Card className={className}>
-      <p className="text-sm text-slate-500">{label}</p>
-      <p className={`mt-1 text-xl font-extrabold sm:text-2xl ${highlight ? 'text-accent-600' : 'text-slate-900'}`}>{value}</p>
-    </Card>
   )
 }
