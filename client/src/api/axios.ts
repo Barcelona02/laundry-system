@@ -9,7 +9,10 @@ const api = axios.create({
 // Kunin ang { message } galing sa server para maipakita sa user
 export function getErrorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {
-    return error.response?.data?.message || error.message
+    const data = error.response?.data
+    // Mongoose validation: { message: "Validation failed", errors: [...] }
+    if (Array.isArray(data?.errors) && data.errors.length) return data.errors.join('. ')
+    return data?.message || error.message
   }
   return 'Something went wrong'
 }

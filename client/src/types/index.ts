@@ -85,6 +85,69 @@ export interface OrderBalance {
 
 export type OrderWithBalance = Order & OrderBalance
 
+// GET /orders/:id: may kasamang buong customer, service, at payments
+export interface OrderDetail extends Omit<OrderWithBalance, 'customer' | 'service'> {
+  customer: Customer | null
+  service: Service | null
+  payments: Payment[]
+}
+
+// GET /stats/dashboard
+export interface DashboardStats {
+  sales: { today: number; thisMonth: number; allTime: number }
+  orders: {
+    total: number
+    byStatus: Record<OrderStatus, number>
+    active: number
+    late: number
+    unclaimed: number
+  }
+  receivables: { unpaidBalance: number; pendingStorageFees: number }
+  machines: { total: number; inUse: number; maintenance: number; utilizationRate: number }
+  averages: { turnaroundHours: number; kgPerOrder: number; orderValue: number }
+  topServices: { name: string; orders: number; billed: number }[]
+  topCustomers: { _id: string; name: string; orders: number; totalSpent: number }[]
+}
+
+// GET /stats/sales?days=7
+export interface SalesReport {
+  days: number
+  total: number
+  series: { date: string; total: number; payments: number }[]
+}
+
+// GET /machines/availability
+export interface MachineTypeSummary {
+  total: number
+  available: number
+  inUse: number
+  maintenance: number
+  availableCapacityKg: number
+}
+
+export interface MachineAvailability {
+  washer: MachineTypeSummary
+  dryer: MachineTypeSummary
+  utilizationRate: number
+}
+
+// GET /track/:orderCode (public, walang personal na detalye)
+export interface TrackResult {
+  orderCode: string
+  customerFirstName: string
+  service: string | null
+  quantity: number
+  status: OrderStatus
+  statusHistory: StatusHistoryEntry[]
+  promisedAt: string
+  claimedAt: string | null
+  isLate: boolean
+  amountDue: number
+  amountPaid: number
+  balance: number
+  storageFee: number
+}
+
 // Laging { message } ang error format ng server
 export interface ApiError {
   message: string
