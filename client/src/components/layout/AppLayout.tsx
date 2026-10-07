@@ -48,7 +48,7 @@ export function AppLayout() {
   )
 
   return (
-    <div className="min-h-screen lg:pl-72">
+    <div className="relative min-h-screen lg:pl-72">
       {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 left-0 hidden w-72 flex-col border-r border-slate-100 bg-white p-6 lg:flex">
         <Link to="/" className="mb-10 px-2">

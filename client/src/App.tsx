@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import { AppLayout } from './components/layout/AppLayout'
+import { BubbleBackground } from './components/layout/BubbleBackground'
 import { ToastProvider } from './context/ToastProvider'
 import CustomerDetail from './pages/CustomerDetail'
 import CustomerForm from './pages/CustomerForm'
@@ -17,6 +18,8 @@ import TrackOrder from './pages/TrackOrder'
 function App() {
   return (
     <ToastProvider>
+      {/* Mga bula sa likod ng lahat ng page */}
+      <BubbleBackground />
       <Routes>
         {/* Public pages (walang sidebar) */}
         <Route path="/" element={<Landing />} />

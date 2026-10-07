@@ -50,7 +50,7 @@ const steps = [
 
 export default function Landing() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-canvas">
+    <div className="relative min-h-screen overflow-hidden">
       {/* Malalambot na kulay sa background */}
       <div className="pointer-events-none absolute -top-40 -left-32 size-[28rem] rounded-full bg-brand-200/60 blur-3xl" />
       <div className="pointer-events-none absolute top-20 -right-40 size-[30rem] rounded-full bg-accent-200/60 blur-3xl" />
@@ -137,7 +137,7 @@ export default function Landing() {
       </section>
 
       {/* Features */}
-      <section className="relative bg-white py-24">
+      <section className="relative bg-white/70 py-24 backdrop-blur-sm">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <p className="text-center text-sm font-semibold tracking-wider text-brand-600 uppercase">Features</p>
           <h2 className="mt-2 text-center text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">

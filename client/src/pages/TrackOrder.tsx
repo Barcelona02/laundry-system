@@ -26,7 +26,7 @@ export default function TrackOrder() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-brand-50 to-canvas">
+    <div className="relative min-h-screen bg-gradient-to-b from-brand-50/70 to-transparent">
       <header className="mx-auto flex max-w-3xl items-center justify-between px-4 py-5">
         <Link to="/">
           <Logo />
